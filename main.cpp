@@ -15,7 +15,7 @@ const unsigned int  RX_ID = 0x101;
 const unsigned int  TX_ID = 0x100;
 
 
-
+//wireles power PCB microcontroller code
 
 float harmonicMean(float arr[], int size){
    float sum = 0;
