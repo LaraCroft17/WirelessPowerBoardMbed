@@ -3,12 +3,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#undef __ARM_FP
 #include "mbed.h"
 #include "CANMsg.h"
 #include <cstdio>
 #include "wirelessPins.hpp"
 #include "TCA9548A.h"
 #include "TMAG5273.hpp"
+#include "HBridge.hpp"
 
 
 const unsigned int  RX_ID = 0x101;
@@ -55,6 +57,14 @@ float trig1D(float leftMag, float rightMag) {
 
 int main()
 {
+    HBridge hBridge(p5, p6, p24, p26);
+
+    while(true) {
+        hBridge.start(25000);
+        wait_us(1000000);
+        hBridge.stop();
+        wait_us(1000000);
+    }
     //CAN related definitions
     CAN can2(PIN_CAN_RX_2, PIN_CAN_TX_2);               // CAN interface
     CANMessage msg;     
