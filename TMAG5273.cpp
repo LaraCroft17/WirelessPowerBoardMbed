@@ -1,30 +1,30 @@
 #include "TMAG5273.hpp"
 #include <stdint.h>
 
-TMAG5273::TMAG5273(PinName sda, PinName sck): i2c(sda, sck) {
+TMAG5273::TMAG5273(I2C* i2c): i2c(i2c) {
     //set frequency
     //fast mode 400khz table 6.10
-    i2c.frequency(400000);
+    //i2c->frequency(400000);
 
     //set operating mode to continuous
     char operating_mode = 0x2; //char = 1 byte 0000 0010 for cont,measure mode (table 7-9)
     char device_config2_register = 0x1; //table 7-6
     char buf[2] = {device_config2_register, operating_mode};
-    i2c.write(writeAddr, buf, 2); //3rd one is length of the buff 
+    i2c->write(writeAddr, buf, 2); //3rd one is length of the buff 
 
     char conv_crc = 0x94; //1001 0100 CONV AVG: bits 4-2 highest 5h  
     // and CRC is enabled on bit 7
     char device_config1_register = 0x0; //table 7-6
     buf[0] = device_config1_register;
     buf[1] = conv_crc;
-    i2c.write(writeAddr, buf, 2); 
+    i2c->write(writeAddr, buf, 2); 
 
     //Sensor config 1 channel 
     char mag_enable = 0x70; //0111 0000 this is enabling all three channels 
     char sensor_config_1 = 0x2; //table 7-6
     buf[0] = sensor_config_1;
     buf[1] = mag_enable;
-    i2c.write(writeAddr, buf, 2); 
+    i2c->write(writeAddr, buf, 2); 
 
 }
 
@@ -57,21 +57,21 @@ bool TMAG5273::getHallData(int* x, int* y, int* z) {
 
         char buf[5];
         buf[0] = x_msb;
-        i2c.write(readAddr, buf, 1);  //Reads  x msb and lsb
-        i2c.read(readAddr, buf, 5);   
+        i2c->write(readAddr, buf, 1);  //Reads  x msb and lsb
+        i2c->read(readAddr, buf, 5);   
         xT += ((int)(int16_t)(buf[0] << 8 | buf[1])) - xOffset;
 
         char bufY[5];
         bufY[0] = y_msb;
-        i2c.write(readAddr, bufY, 1);  //Reads  x msb and lsb
-        i2c.read(readAddr, bufY, 5);   
+        i2c->write(readAddr, bufY, 1);  //Reads  x msb and lsb
+        i2c->read(readAddr, bufY, 5);   
         yT += ((int)(int16_t)(bufY[0] << 8 | bufY[1])) - yOffset;
         
         
         char bufZ[5];
         bufZ[0] = z_msb;
-        i2c.write(readAddr, bufZ, 1);  //Reads  x msb and lsb
-        i2c.read(readAddr, bufZ, 5);   
+        i2c->write(readAddr, bufZ, 1);  //Reads  x msb and lsb
+        i2c->read(readAddr, bufZ, 5);   
         zT += ((int)(int16_t)(bufZ[0] << 8 | bufZ[1])) - zOffset;
     }
 

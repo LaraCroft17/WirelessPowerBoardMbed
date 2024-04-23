@@ -5,14 +5,14 @@
 
 class TMAG5273 {
  public:
-    TMAG5273(PinName sda, PinName sck); //configures at initialization 
+    TMAG5273(I2C* i2c); //configures at initialization 
     bool getHallData(int* x, int* y, int* z);
     void getMagnitude(float* mag);
     void calibrate(); 
 
     int oversampleAmount = 0;
  private:
-    I2C i2c;
+    I2C* i2c;
     //table 7-2 
     const int addr7bit = 0x35;      //I2C address (7-bit I2C address)
                                     // 35: 0011 0101

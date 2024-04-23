@@ -91,7 +91,7 @@ public:
      * @param reset TCA9546A reset pin (default: NC for simple pullup connected)
      * @param hz I2C bus frequency (default: 400kHz)
      */
-    TCA9548A( PinName sda, PinName scl, uint8_t i2c_address = 0x70, PinName resetPin = NC);
+    TCA9548A( I2C* i2c, uint8_t i2c_address = 0x70, PinName resetPin = NC);
  
     /** Selecting a channel
      *
@@ -114,7 +114,7 @@ public:
  
  
 private:
-    I2C i2c_;
+    I2C* i2c_;
     DigitalOut reset_pin;
     uint8_t i2c_addr;
 
